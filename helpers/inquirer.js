@@ -81,8 +81,81 @@ const leerInput = async(message) => {
 
 }
 
+const listadoTareasBorrar = async(tareas = []) =>{
+
+    //QUEREMOS ESTRUCTURA DE CHOICES UN ARREGLO DE OBJETOS
+    /*{
+        value: '1',
+        name: `${'1.'.red} Crear tarea`
+    },*/
+    //map en arreglos NOS PERMITE CREAR UN ARREGLO DONDE CADA ESPACIO TENDRÁN LA ESTRUCTURA POR CADA ITERACIÓN
+    const choices = tareas.map( (tarea,i) => {
+        const idx = `${i+1}`.green;
+        return{
+            value:tarea.id,
+            name:`${idx} ${tarea.desc}`
+        }
+    });
+
+    const preguntas = [
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Borrar',
+            choices
+        }
+    ]
+    const {id} = await inquirer.prompt(preguntas);
+    return id;
+} 
+
+const confirmar = async(message) => {
+    const question = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message
+        }
+    ]
+
+    const {ok} = await inquirer.prompt(question);
+    return ok;
+}
+
+const mostrarListadoChecklist = async(tareas = []) =>{
+
+    //QUEREMOS ESTRUCTURA DE CHOICES UN ARREGLO DE OBJETOS
+    /*{
+        value: '1',
+        name: `${'1.'.red} Crear tarea`
+    },*/
+    //map en arreglos NOS PERMITE CREAR UN ARREGLO DONDE CADA ESPACIO TENDRÁN LA ESTRUCTURA POR CADA ITERACIÓN
+    const choices = tareas.map( (tarea,i) => {
+        const idx = `${i+1}`.green;
+        return{
+            value:tarea.id,
+            name:`${idx} ${tarea.desc}`,
+            checked: (tarea.completadoEn) ? true : false
+        }
+    });
+
+    const preguntas = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Seleccione',
+            choices
+        }
+    ]
+    const {ids} = await inquirer.prompt(preguntas);
+    return ids;
+} 
+
 module.exports = {
     inquirerMenu,
     pausa, 
-    leerInput
+    leerInput,
+    listadoTareasBorrar,
+    confirmar,
+    mostrarListadoChecklist
 }
